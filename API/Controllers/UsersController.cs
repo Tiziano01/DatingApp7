@@ -1,13 +1,13 @@
 using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {//la richiesta http chiede a questo controller e all'endpoint httpget di restituire e mostrare la lista di utenti
-    [ApiController]
-    [Route("api/[controller]")]//route parameter. Si accede al controller con localhost/../api/users
-    public class UsersController
+    [Authorize]
+    public class UsersController : BaseApiController
     {
         
         private readonly DataContext _context;
@@ -18,6 +18,7 @@ namespace API.Controllers
         
         }
         //creo gli endpoint per prendere le richieste
+        [AllowAnonymous]
         [HttpGet]
         public async Task <ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
@@ -25,7 +26,7 @@ namespace API.Controllers
 
             return users;
         }
-
+        
         [HttpGet("{id}")]
         public async Task <ActionResult<AppUser>> GetUser(int id)
         {
